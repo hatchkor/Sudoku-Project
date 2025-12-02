@@ -23,7 +23,15 @@ class SudokuGenerator:
 	None
     '''
     def __init__(self, row_length, removed_cells):
-        pass
+        self.row_length = row_length
+        self.removed_cells = removed_cells
+        self.board = []
+        for i in range(row_length):
+            row = []
+            for j in range(row_length):
+                row.append(0)
+            self.board.append(row)
+        self.box_length = int(math.sqrt(self.row_length))
 
     '''
 	Returns a 2D python list of numbers which represents the board
@@ -32,7 +40,7 @@ class SudokuGenerator:
 	Return: list[list]
     '''
     def get_board(self):
-        pass
+        return self.board
 
     '''
 	Displays the board to the console
@@ -42,7 +50,7 @@ class SudokuGenerator:
 	Return: None
     '''
     def print_board(self):
-        pass
+        print(self.board)
 
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
@@ -55,7 +63,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
-        pass
+        if num in self.board[row]:
+            return False
+        else:
+            return True
 
     '''
 	Determines if num is contained in the specified column (vertical) of the board
@@ -68,7 +79,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_col(self, col, num):
-        pass
+        for i in range(self.row_length):
+            if self.board[i][col] == num:
+                return False
+        return True
 
     '''
 	Determines if num is contained in the 3x3 box specified on the board
@@ -83,7 +97,11 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self, row_start, col_start, num):
-        pass
+        for i in range(row_start, row_start+3):
+            for j in range(col_start, col_start+3):
+                if self.board[i][j]== num:
+                    return False
+        return True
     
     '''
     Determines if it is valid to enter num at (row, col) in the board
@@ -96,7 +114,16 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def is_valid(self, row, col, num):
-        pass
+        if not self.valid_in_row(row, num):
+            return False
+        if not self.valid_in_col(col, num):
+            return False
+        row_start = (row // 3)*3
+        col_start = (col // 3)*3
+        if not self.valid_in_box(row_start, col_start, num):
+            return False
+        return True
+
 
     '''
     Fills the specified 3x3 box with values
@@ -109,7 +136,24 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_box(self, row_start, col_start):
-        pass
+        used_numbers = []
+        numbers = {1,2,3,4,5,6,7,8,9}
+        for i in range(row_start, row_start+3):
+            for j in range(col_start, col_start+3):
+                if not self.board[i][j] == 0:
+                    used_numbers.append(self.board[i][j])
+        if len(used_numbers) == 9:
+            return
+        used_set = set(used_numbers)
+        available_numbers = list(numbers - used_set)
+        for i in range(row_start, row_start+3):
+            for j in range(col_start, col_start+3):
+                if self.board[i][j] == 0:
+                    self.board[i][j] = random.choice(available_numbers)
+                    available_numbers.remove(self.board[i][j])
+
+
+
     
     '''
     Fills the three boxes along the main diagonal of the board
@@ -119,7 +163,8 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_diagonal(self):
-        pass
+        for i in range(0, self.row_length, self.box_length):
+            self.fill_box(i, i)
 
     '''
     DO NOT CHANGE
@@ -209,3 +254,32 @@ def generate_sudoku(size, removed):
     sudoku.remove_cells()
     board = sudoku.get_board()
     return board
+
+class Cell:
+    def __init__(self, value, row, col,  screen):
+        self.value = value
+        self.row = row
+        self.col = col
+        self.screen = screen
+
+    def set_cell_value(self, value):
+        self.value = value
+
+    def set_sketched_value(self, value):
+        self.value = value
+
+    def draw(self):
+        self.screen.fill(self.value)
+
+# class Board:
+#     def __init__(self, width, height, screen, difficulty):
+#         self.width = width
+#         self.height = height
+#         self.screen = screen
+#         self.difficulty = difficulty
+#
+#     def draw(self):
+#         self.screen.fill(self.difficulty)
+#
+#     def click(self, x, y):
+
