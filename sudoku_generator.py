@@ -301,5 +301,7 @@ class Cell:
 #     def draw(self):
 #
 #     def click(self, x, y):
+#
+# def clear(self):
 
 
