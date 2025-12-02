@@ -1,4 +1,4 @@
-import math,random
+import math,random, pygame
 
 """
 This was adapted from a GeeksforGeeks article "Program for Sudoku Generator" by Aarti_Rathi and Ankur Trisal
@@ -102,7 +102,7 @@ class SudokuGenerator:
                 if self.board[i][j]== num:
                     return False
         return True
-    
+
     '''
     Determines if it is valid to enter num at (row, col) in the board
     This is done by checking that num is unused in the appropriate, row, column, and box
@@ -154,7 +154,7 @@ class SudokuGenerator:
 
 
 
-    
+
     '''
     Fills the three boxes along the main diagonal of the board
     These are the boxes which start at (0,0), (3,3), and (6,6)
@@ -196,7 +196,7 @@ class SudokuGenerator:
                 col = 0
                 if row >= self.row_length:
                     return True
-        
+
         for num in range(1, self.row_length + 1):
             if self.is_valid(row, col, num):
                 self.board[row][col] = num
@@ -230,7 +230,13 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
-        pass
+        count = 0
+        while count < self.removed_cells:
+            row = random.randint(0, self.row_length - 1)
+            col = random.randint(0, self.row_length - 1)
+            if self.board[row][col] != 0:
+                self.board[row][col] = 0
+                count += 1
 
 '''
 DO NOT CHANGE
@@ -256,20 +262,32 @@ def generate_sudoku(size, removed):
     return board
 
 class Cell:
-    def __init__(self, value, row, col,  screen):
+    def __init__(self, value, row, col, width, height, screen, x_offset=0, y_offset=0):
         self.value = value
         self.row = row
         self.col = col
         self.screen = screen
+        self.selected = False
+        self.width = width
+        self.height = height
+        self.x_offset = x_offset
+        self.y_offset = y_offset
+        self.sketch = 0
 
     def set_cell_value(self, value):
         self.value = value
 
     def set_sketched_value(self, value):
-        self.value = value
+        self.sketch = value
 
     def draw(self):
-        self.screen.fill(self.value)
+        if self.selected:
+            pygame.draw.rect(self.screen, (200, 200, 255)),(self.x_offset + self.col*self.width, self.y_offset + self.row*self.height, self.width, self.height)
+        if self.value != 0:
+            font = pygame.font.SysFont('Charter', self.width//2)
+            text = font.render(str(self.value), True, (0, 0, 0))
+            text_rect = text.get_rect(center = (self.x_offset + self.col*self.width, self.y_offset + self.row*self.height))
+            self.screen.blit(text, text_rect)
 
 # class Board:
 #     def __init__(self, width, height, screen, difficulty):
@@ -277,9 +295,11 @@ class Cell:
 #         self.height = height
 #         self.screen = screen
 #         self.difficulty = difficulty
+#         self.rows = 9
+#         self.cols = 9
 #
 #     def draw(self):
-#         self.screen.fill(self.difficulty)
 #
 #     def click(self, x, y):
+
 
