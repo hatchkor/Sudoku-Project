@@ -306,7 +306,6 @@ class Board:
                 thickness = 1
             pygame.draw.line(self.screen, (0, 0, 0), (100, 100 + 50*i), (550, 100 + 50*i), thickness) # screen, color, start_pos, end_pos, thickness
             pygame.draw.line(self.screen, (0,0,0), (100 + 50*i, 100), (100+50*i, 550), thickness)
-        pygame.display.update()
 
     def select(self, row, col):
         self.selected_cell = Cell(0, row, col, self.screen)
