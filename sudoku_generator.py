@@ -1,5 +1,7 @@
 import math,random, pygame
 
+from pygame import rect
+
 """
 This was adapted from a GeeksforGeeks article "Program for Sudoku Generator" by Aarti_Rathi and Ankur Trisal
 https://www.geeksforgeeks.org/program-sudoku-generator/
@@ -262,13 +264,15 @@ def generate_sudoku(size, removed):
     return board
 
 class Cell:
-    def __init__(self, value, row, col, width, height, screen):
+    def __init__(self, value, row, col, screen):
         self.value = value
         self.row = row
         self.col = col
         self.screen = screen
-        self.selected = False
         self.sketch = 0
+        self.selected = False
+        self.row_pixels = int(100 + (self.row * 50))
+        self.col_pixels = int(100 + (self.col * 50))
 
     def set_cell_value(self, value):
         self.value = value
@@ -277,26 +281,48 @@ class Cell:
         self.sketch = value
 
     def draw(self):
-
+        if self.selected:
+            pygame.draw.rect(self.screen, (235, 64, 52), (self.row_pixels, self.col_pixels, 49, 49))
+            pygame.display.update()
         if self.value != 0:
-            font = pygame.font.SysFont('Charter', self.width//2)
+            font = pygame.font.SysFont('Charter', 25)
             text = font.render(str(self.value), True, (0, 0, 0))
-            text_rect = text.get_rect(center = (self.x_offset + self.col*self.width, self.y_offset + self.row*self.height))
-            self.screen.blit(text, text_rect)
+            self.screen.blit(text, (self.row_pixels, self.col_pixels))
 
-# class Board:
-#     def __init__(self, width, height, screen, difficulty):
-#         self.width = width
-#         self.height = height
-#         self.screen = screen
-#         self.difficulty = difficulty
-#         self.rows = 9
-#         self.cols = 9
-#
-#     def draw(self):
-#
-#     def click(self, x, y):
-#
-# def clear(self):
+class Board:
+    def __init__(self, width, height, screen, difficulty, board):
+        self.width = width
+        self.height = height
+        self.screen = screen
+        self.difficulty = difficulty
+        self.selected_cell = None
+        self.board = board
+
+    def draw(self):
+        for i in range(0,10):
+            if i % 3 == 0:
+                thickness = 4
+            else:
+                thickness = 1
+            pygame.draw.line(self.screen, (0, 0, 0), (100, 100 + 50*i), (550, 100 + 50*i), thickness) # screen, color, start_pos, end_pos, thickness
+            pygame.draw.line(self.screen, (0,0,0), (100 + 50*i, 100), (100+50*i, 550), thickness)
+        pygame.display.update()
+
+    def select(self, row, col):
+        self.selected_cell = Cell(0, row, col, self.screen)
+
+    def click(self, x, y):
+        if 100 <= x <= 550 and 100 <= y <= 550:
+            row = (y - 100) // 50
+            col = (x - 100) // 50
+            return row, col
+
+        return None
+
+    def clear(self):
+        # Needs a way to figure out if a cell is user-generated or not
+        pass
+
+
 
 
