@@ -262,16 +262,12 @@ def generate_sudoku(size, removed):
     return board
 
 class Cell:
-    def __init__(self, value, row, col, width, height, screen, x_offset=0, y_offset=0):
+    def __init__(self, value, row, col, width, height, screen):
         self.value = value
         self.row = row
         self.col = col
         self.screen = screen
         self.selected = False
-        self.width = width
-        self.height = height
-        self.x_offset = x_offset
-        self.y_offset = y_offset
         self.sketch = 0
 
     def set_cell_value(self, value):
@@ -281,8 +277,7 @@ class Cell:
         self.sketch = value
 
     def draw(self):
-        if self.selected:
-            pygame.draw.rect(self.screen, (200, 200, 255)),(self.x_offset + self.col*self.width, self.y_offset + self.row*self.height, self.width, self.height)
+
         if self.value != 0:
             font = pygame.font.SysFont('Charter', self.width//2)
             text = font.render(str(self.value), True, (0, 0, 0))
