@@ -85,10 +85,10 @@ def main():
                 if reset_button.collidepoint(mouse_pos):
                     pass
                 if restart_button.collidepoint(mouse_pos):
-                    pass
-                if exit_button.collidepoint(mouse_pos):
                     screen.fill((255, 255, 255))
                     show_main_menu()
+                if exit_button.collidepoint(mouse_pos):
+                    pygame.quit()
             if event.type == pygame.KEYDOWN and selected:
                 row, col = selected
                 if event.key == pygame.K_1:
