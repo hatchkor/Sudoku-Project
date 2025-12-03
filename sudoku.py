@@ -53,6 +53,7 @@ def draw_numbers(screen, board_data):
 def main():
     global screen, removed
     selected = None
+    font = pygame.font.SysFont('Charter', 30)
     screen = pygame.display.set_mode((800, 800))
     screen.fill((255, 255, 255))
     difficulty = show_main_menu()
@@ -65,7 +66,9 @@ def main():
     elif difficulty == "hard":
         removed = 50
         screen.fill((255, 255, 255))
-
+    reset_button = pygame.Rect(50, 600, 200, 50)
+    restart_button = pygame.Rect(300, 600, 200, 50)
+    exit_button = pygame.Rect(550, 600, 200, 50)
     board_data = generate_sudoku(9, removed)
     board = Board(450, 450, screen, difficulty, board_data)
     running = True
@@ -75,9 +78,17 @@ def main():
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mx, my = pygame.mouse.get_pos()
+                mouse_pos = pygame.mouse.get_pos()
                 pos = board.click(mx, my)
                 if pos:
                     selected = pos
+                if reset_button.collidepoint(mouse_pos):
+                    pass
+                if restart_button.collidepoint(mouse_pos):
+                    pass
+                if exit_button.collidepoint(mouse_pos):
+                    screen.fill((255, 255, 255))
+                    show_main_menu()
             if event.type == pygame.KEYDOWN and selected:
                 row, col = selected
                 if event.key == pygame.K_1:
@@ -103,6 +114,9 @@ def main():
         screen.fill((255,255,255))
         board.draw()
         draw_numbers(screen, board_data)
+        draw_button(screen, reset_button, "Reset", font, (247, 143, 57))
+        draw_button(screen, restart_button, "Restart", font, (247, 143, 57))
+        draw_button(screen, exit_button, "Exit", font, (247, 143, 57))
         pygame.display.update()
     pygame.quit()
 
