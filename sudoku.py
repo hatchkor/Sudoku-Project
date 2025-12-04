@@ -1,4 +1,3 @@
-import pygame
 from sudoku_generator import *
 pygame.init()
 
