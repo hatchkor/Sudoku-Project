@@ -16,7 +16,7 @@ def show_main_menu():
     hard_button = pygame.Rect(550, 300, 200, 50)
 
     while True:
-        draw_button(screen, easy_button, "Easy", font, (31, 247, 20))  # screen, rectangle, text, font, color
+        draw_button(screen, easy_button, "Easy", font, (30, 247, 20))  # screen, rectangle, text, font, color
         draw_button(screen, medium_button, "Medium", font, (209, 219, 15))
         draw_button(screen, hard_button, "Hard", font, (227, 28, 25))
 
